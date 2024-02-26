@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> {% block title %} Home {% endblock title %} </title>
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <style>
+        body {
+            padding-top: 56px;
+        }
+        .post {
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body class="bg-dark text-white">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <p class="text-white">CodeCraze</p>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{% url "home" %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white " href="#">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="#">Contact</a>
+                    </li>
+                    {% if user.is_authenticated %} 
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="{% url "create" %}">Create Post</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Header -->
+    
+    <style>
+        .header-bg {
+            background-image: url("/static/img/capa.png");
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+    
+    <header class="bg-dark py-5 text-white text-center header-bg">
+        <div class="container">
+            <h1 class="text-dark">CodeCraze</h1>
+            <p class="lead"></p>
+        </div>
+    </header>
+    
+    
+    
+    {% block  content %}
+        <!-- Main Content -->
+    {% endblock  %}
+        <!-- Pagination -->
+
+        <nav class="container" aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                
+                {% if posts.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link text-dark" href="{% url "home" %}?page={{ posts.previous_page_number }}">Anterior</a>
+                    </li>
+                {% endif %}
+                {% if posts.has_next %}
+                    <li class="page-item">
+                        <a class="page-link text-dark" href="{% url "home" %}?page={{ posts.next_page_number }}">Próximo</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+        
+    
+    <!-- Footer -->
+    <footer class="py-4 bg-white text-dark header-bg main-footer">
+        <div class="container text-center">
+            <div style="display: inline-block; vertical-align: middle; margin-left: 20px;">
+                <a href="https://github.com/Anailton10" style="color: inherit;">By Anailton Silva</a>
+            </div>
+            
+            <div style="display: inline-block; vertical-align: middle;">
+                <!-- Redireciona para url de login -->
+                <a href="#" style="color: inherit;">&copy; 2024 CodeCraze</a>
+            </div>
+            
+        </div>
+    </footer>
+    
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

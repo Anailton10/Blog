@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<br>
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <!-- Post Section -->
+            {% for post in posts %}
+            <div class="post">
+                {% if post.cover_image %}
+                <!-- Capa do Post -->
+                <img src="{{ post.cover_image.url }}" alt="Capa do Post">
+                {% endif %}
+                <!-- Título, Categoria, Descrição e Botão "Ver Mais" -->
+                <h2>{{ post.title }}</h2>
+                <p>Categoria: programação</p>
+                <p>{{ post.description }}</p>
+                <!-- Autor e Data de Publicação em Grade -->
+                <div class="row">
+                    <div class="col-md-4">
+                        <p>Autor: {{ post.author.username }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p>Publicado em: {{ post.created_at }}</p>
+                    </div>
+                </div>
+                <a href="{% url 'detail' post.id %}" class="btn btn-dark bg-white text-dark">Ver mais</a>
+            </div>
+            {% endfor %}
+        </div>
+        <!-- Coluna para as Categorias -->
+        <div class="col-md-4">
+            <h3>Categories</h3>
+            <select name="categoria" class="form-control" onchange="location = this.value;">
+                <option value="#">Todas as Categorias</option>
+                <option value="#">Categoria 1</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+

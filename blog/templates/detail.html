@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Detail{% endblock title %}
+
+{% block content %}
+<br>
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <!-- Post Section -->
+            <div class="post">
+                <h2>{{ post.title }}</h2>
+                <div class="post-details">
+                    <div class="row">
+                        <div class="col-md-2">
+                           <h6> <p><strong>Autor:</strong> JUCA</p> </h6>
+                        </div>
+                        <div class="col-md-6">
+                            <h6> <p><strong>Laçamento:</strong> {{ post.created_at }}</p> </h6>
+                        </div>
+                    </div>
+                </div>
+                <!-- Conteúdo do Post dividido em várias tags <p> -->
+                <p>{{ post.content|linebreaksbr }}</p>
+                <p>Mais um parágrafo...</p>
+                <p>Mais um parágrafo...</p>
+                <!-- Detalhes do Post -->
+                
+            </div>
+            <!-- Botão Voltar -->
+            <a href="{% url 'home' %}" class="btn btn-dark bg-white text-dark">Voltar à Página Inicial</a>
+        </div>
+    </div>
+</div>
+{% endblock content %}
