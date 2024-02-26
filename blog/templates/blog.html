@@ -15,30 +15,49 @@
                 {% endif %}
                 <!-- Título, Categoria, Descrição e Botão "Ver Mais" -->
                 <h2>{{ post.title }}</h2>
-                <p>Categoria: programação</p>
+                <p>Categoria: {{ post.category.name }}</p>
                 <p>{{ post.description }}</p>
-                <!-- Autor e Data de Publicação em Grade -->
+                <!-- Autor, Data de Publicação e Linguagem em Grade -->
                 <div class="row">
                     <div class="col-md-4">
                         <p>Autor: {{ post.author.username }}</p>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <p>Publicado em: {{ post.created_at }}</p>
+                    </div>
+                    <div class="col-md-4">
+                        <p>Linguagem: {{ post.language.name }}</p>
                     </div>
                 </div>
                 <a href="{% url 'detail' post.id %}" class="btn btn-dark bg-white text-dark">Ver mais</a>
             </div>
             {% endfor %}
         </div>
-        <!-- Coluna para as Categorias -->
-        <div class="col-md-4">
+        <div class="col-md-2">
             <h3>Categories</h3>
-            <select name="categoria" class="form-control" onchange="location = this.value;">
-                <option value="#">Todas as Categorias</option>
-                <option value="#">Categoria 1</option>
-            </select>
+            <form method="GET" action="{% url 'home' %}">
+                <select name="category_id" class="form-control" onchange="this.form.submit()">
+                    <option value="">Todas as Categorias</option>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}">{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+            </form>
+        </div>
+        <div class="col-md-2">
+            <h3>Languages</h3>
+            <form method="GET" action="{% url 'home' %}">
+                <select name="language_id" class="form-control" onchange="this.form.submit()">
+                    <option value="">Todas as Linguagens</option>
+                    {% for language in languages %}
+                        <option value="{{ language.id }}">{{ language.name }}</option>
+                    {% endfor %}
+                </select>
+            </form>
         </div>
     </div>
+    
+    
 </div>
 
 {% endblock content %}
