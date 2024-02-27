@@ -4,3 +4,4 @@ __pycache__
 .pylintrc
 db.sqlite3
 media
+imagens
