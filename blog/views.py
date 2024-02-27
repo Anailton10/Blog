@@ -1,11 +1,16 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views.generic import CreateView, DetailView, ListView
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    UpdateView,
+)
 
-from .forms import CreateBlogPostForm
+from .forms import CreatePostForm
 from .models import BlogPost, Category, Language
 
 
@@ -60,7 +65,7 @@ class Detail(DetailView):
 @method_decorator(login_required(login_url="login"), name="dispatch")
 class CreatePost(CreateView):
     model = BlogPost
-    form_class = CreateBlogPostForm
+    form_class = CreatePostForm
     template_name = "create_post.html"
     success_url = reverse_lazy("home")
 
@@ -70,23 +75,24 @@ class CreatePost(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['post_form'] = context['form']
+        context["post_form"] = context["form"]  # sobrescrevendo context padrão
         return context
 
 
-@login_required()
-def update_post(request, pk):
+@method_decorator(login_required(login_url="login"), name="dispatch")
+class UpdatePost(UpdateView):
+    model = BlogPost
+    form_class = CreatePostForm
+    template_name = "update_post.html"
 
-    post = get_object_or_404(BlogPost, id=pk)
+    def get_success_url(self):
+        return reverse_lazy("detail", kwargs={"pk": self.object.pk})
 
-    if request.method == "POST":
 
-        form = CreateBlogPostForm(request.POST, post)
+@method_decorator(login_required(login_url="login"), name="dispatch")
+class DeletePost(DeleteView):
+    model = BlogPost
+    template_name = "delete_post.html"
+    success_url = '/home/'
 
-        if form.is_valid():
-            form.save()
-            return redirect("home")
-    else:
-        form = CreateBlogPostForm(post)
 
-    return render(request, "update_post.html", {"post": form})

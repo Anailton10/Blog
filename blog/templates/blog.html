@@ -30,7 +30,6 @@
                     </div>
                 </div>
                 <a href="{% url 'detail' post.id %}" class="btn btn-dark bg-white text-dark">Ver mais</a>
-                <a href="{% url 'updade' post.id %}" class="btn btn-dark bg-white text-dark">Editar</a>
             </div>
             {% endfor %}
         </div>
@@ -51,7 +50,11 @@
                 <select name="language_id" class="form-control" onchange="this.form.submit()">
                     <option value="">Todas as Linguagens</option>
                     {% for language in languages %}
-                        <option value="{{ language.id }}">{{ language.name }}</option>
+                        {% if language %}
+                            <option value="{{ language.id }}">{{ language.name }}</option>
+                        {% else %}
+                        <p class="no-results">Nenhum carro encontrado.</p>
+                        {% endif %}
                     {% endfor %}
                 </select>
             </form>
