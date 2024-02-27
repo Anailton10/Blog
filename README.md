@@ -1,8 +1,8 @@
-Blog CodeCraze
+## Blog CodeCraze
 
 O Blog de Programação é um projeto que visa fornecer informações, tutoriais e artigos sobre diversos tópicos de programação.
 
-Requisitos de Instalação
+## Requisitos de Instalação
 asgiref==3.7.2
 astroid==3.0.3
 colorama==0.4.6
@@ -26,7 +26,7 @@ cd nome-do-repositorio
 Instale as dependências:
 
 pip install -r requirements.txt
-Configuração
+## Configuração
 Configure as variáveis de ambiente necessárias, se aplicável.
 Execução do Projeto
 Execute as migrações do banco de dados:
@@ -37,11 +37,10 @@ Inicie o servidor de desenvolvimento:
 python manage.py runserver
 Acesse o blog no navegador em http://localhost:8000/home/
 
-Funcionalidades Principais
+## Funcionalidades Principais
  Cadastro e login de usuários
  Visualização de artigos e tutoriais
  Filtragem por categoria e linguagem
  Administração de conteúdo através do painel de administração do Django
  Administração de conteúdo diretamente no site
 
- ![Texto Alternativo](imagens/imag1.png)
