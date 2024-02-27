@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Register User{% endblock title %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2>Register User</h2>
+  <form method="POST" class="mt-4"> {% csrf_token %}
+
+    <div class="form-group">
+        {{ user_form.username.errors }} 
+        <label for="username"> Username: </label>
+        <input type="text" name="username" class="form-control" placeholder="Username" value="{{ user_form.username.value }}">         
+    </div>
+
+    <div class="form-group">
+        {{ user_form.email.errors }} 
+        <label for="email"> Email: </label>
+        <input type="email" name="email" class="form-control" placeholder="Email" value="{{ user_form.email.value }}">   
+    </div>
+
+    <div class="form-group">
+        {{ user_form.password1.errors }} 
+        <label for="password1"> Password: </label>
+        <input type="password" name="password1" class="form-control" placeholder="Password">
+    </div>
+
+    <div class="form-group">
+        {{ user_form.password2.errors }} 
+        <label for="password2"> Confirm Password: </label>
+        <input type="password" name="password2" class="form-control" placeholder="Confirm Password">
+    </div>
+
+    <button type="submit" class="btn btn-dark bg-white text-dark">Register</button>
+  </form>
+</div>
+{% endblock %}

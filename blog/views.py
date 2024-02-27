@@ -40,20 +40,16 @@ class Home(ListView):
         categories = Category.objects.all()
         languages = Language.objects.all()
 
-        posts = context["posts"]  # context_object_name
-
-        paginator = Paginator(posts, self.paginate_by)
-
-        page_num = self.request.GET.get("page")
-
-        pages = paginator.get_page(page_num)
+        paginator = context['paginator']
+        page_obj = context['page_obj']
 
         # Adiciona os objetos ao contexto
         context["categories"] = categories
         context["languages"] = languages
-        context["posts"] = pages
+        context["posts"] = page_obj
 
         return context
+
 
 
 class Detail(DetailView):

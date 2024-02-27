@@ -42,6 +42,9 @@
                         <li class="nav-item">
                             <a class="nav-link text-white" href="{% url "create" %}">Create Post</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="{% url "logout" %}">Logout</a>
+                        </li>
                     {% endif %}
                 </ul>
             </div>
@@ -96,8 +99,7 @@
             </div>
             
             <div style="display: inline-block; vertical-align: middle;">
-                <!-- Redireciona para url de login -->
-                <a href="#" style="color: inherit;">&copy; 2024 CodeCraze</a>
+                <a href="{% url "login" %}" style="color: inherit;">&copy; 2024 CodeCraze</a>
             </div>
             
         </div>
