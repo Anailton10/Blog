@@ -1,56 +1,92 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
+from django.views.generic import CreateView, DetailView, ListView
 
 from .forms import CreateBlogPostForm
 from .models import BlogPost, Category, Language
 
 
-def home(request):
-    posts = BlogPost.objects.all().order_by("-id")
-    category_id = request.GET.get("category_id")
-    language_id = request.GET.get("language_id")
+class Home(ListView):
+    model = BlogPost
+    template_name = "blog.html"
+    context_object_name = "posts"
+    paginate_by = 2
 
-    categories = Category.objects.all()
-    languages = Language.objects.all()
+    def get_queryset(self):
+        posts = BlogPost.objects.all().order_by("-id")
 
-    if category_id:
-        posts = posts.filter(category__id=category_id)
+        category_id = self.request.GET.get("category_id")
+        language_id = self.request.GET.get("language_id")
 
-    if language_id:
-        posts = posts.filter(language__id=language_id)
+        if category_id:
+            posts = posts.filter(category__id=category_id)
 
-    paginator = Paginator(posts, 2)
-    page_num = request.GET.get("page")
-    pages = paginator.get_page(page_num)
+        if language_id:
+            posts = posts.filter(language__id=language_id)
 
-    return render(
-        request,
-        "blog.html",
-        {"posts": pages, "categories": categories, "languages": languages},
-    )
+        return posts
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        categories = Category.objects.all()
+        languages = Language.objects.all()
+
+        posts = context["posts"]  # context_object_name
+
+        paginator = Paginator(posts, self.paginate_by)
+
+        page_num = self.request.GET.get("page")
+
+        pages = paginator.get_page(page_num)
+
+        # Adiciona os objetos ao contexto
+        context["categories"] = categories
+        context["languages"] = languages
+        context["posts"] = pages
+
+        return context
 
 
-def detail(request, pk):
-    post = BlogPost.objects.get(id=pk)
+class Detail(DetailView):
+    model = BlogPost
+    template_name = "detail.html"
+    context_object_name = "post"
 
-    return render(request, "detail.html", {"post": post})
+
+@method_decorator(login_required(login_url="login"), name="dispatch")
+class CreatePost(CreateView):
+    model = BlogPost
+    form_class = CreateBlogPostForm
+    template_name = "create_post.html"
+    success_url = reverse_lazy("home")
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['post_form'] = context['form']
+        return context
 
 
 @login_required()
-def create_post(request):
+def update_post(request, pk):
+
+    post = get_object_or_404(BlogPost, id=pk)
+
     if request.method == "POST":
-        post_form = CreateBlogPostForm(request.POST, request.FILES)
-        if post_form.is_valid():
-            post_form.save()
+
+        form = CreateBlogPostForm(request.POST, post)
+
+        if form.is_valid():
+            form.save()
             return redirect("home")
-        else:
-            return render(request, "register_post.html", {"post_form": post_form})
     else:
-        post_form = CreateBlogPostForm()
-        return render(request, "register_post.html", {"post_form": post_form})
+        form = CreateBlogPostForm(post)
 
-
-def category(request):
-    categories = Category.objects.all()
-    return render(request, "blog.html", {"categories": categories})
+    return render(request, "update_post.html", {"post": form})
