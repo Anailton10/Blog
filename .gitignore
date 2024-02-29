@@ -1,7 +1,9 @@
 venv
+.env
 mypy.ini
 __pycache__
 .pylintrc
 db.sqlite3
 media
 imagens
+notas.txt
